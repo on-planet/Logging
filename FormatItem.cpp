@@ -18,7 +18,7 @@ namespace log {
 
     // 日志级别格式化子类
     void LevelFormatItem::Format(std::ostream& out, const LogMsg& msg){
-        out << msg.getLine();  // 输出源码行号
+        out << LogLevel::ToString(msg.getLevel());  // 输出源码行号
     }
 
     // 日志名称格式化子类

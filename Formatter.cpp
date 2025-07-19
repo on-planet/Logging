@@ -1,11 +1,23 @@
 #include "Formatter.hpp"
+#include "FormatItem.hpp"
+
 #include <sstream>
 
 namespace log{
+
     // 构造函数，接受一个日志格式化模式字符串，并解析该模式
-    Formatter::Formatter(const std::string& pattern) : _pattern(pattern) {
+    Formatter::Formatter(std::string pattern = "[%d{%H:%M:%S}][%p][%c][%t][%f:%l]%T%m%n") : _pattern(pattern) {
         if (!ParsePattern()) {
             throw std::runtime_error("Failed to parse pattern: " + _pattern);
+        }
+    }
+
+    // Format方法，接受一个输出流和一个LogMsg对象，将日志消息格式化并输出到流中
+    void Formatter::Format(std::ostream& out, const LogMsg& msg) const{
+        for (auto& item: _items) {
+            if (item) { // 检查格式化项是否有效
+                item->Format(out, msg);  // 调用每个格式化项的Format方法
+            }
         }
     }
 
@@ -14,15 +26,6 @@ namespace log{
         std::stringstream ssm;
         Format(ssm, msg); // 将日志消息格式化为字符串
         return ssm.str(); // 返回格式化后的字符串
-    }
-
-    // Format方法，接受一个输出流和一个LogMsg对象，将日志消息格式化并输出到流中
-    void Formatter::Format(std::ostream& out, const LogMsg& msg) const{
-        for (auto & item : _items) {
-            if (item) {
-                item->Format(out, msg);  // 调用每个格式化项的Format方法
-            }
-        }
     }
 
     // 解析日志格式化模式字符串，将其转换为对应的格式化项
@@ -64,6 +67,38 @@ namespace log{
             _items.push_back(CreateItem("o", str));
         }
         return true;
+    }
+
+    FormatItem::ptr Formatter::CreateItem(const std::string& key, const std::string& value){
+        // 根据键值对创建对应的格式化项
+        if (key == "d") {
+            return std::make_shared<TimeFormatItem>(value);
+        }
+        if (key == "p") {
+            return std::make_shared<LevelFormatItem>();
+        }
+        if (key == "c") {
+            return std::make_shared<LoggerFormatItem>();
+        }
+        if (key == "t") {
+            return std::make_shared<ThreadFormatItem>();
+        }
+        if (key == "f") {
+            return std::make_shared<FileFormatItem>();
+        }
+        if (key == "l") {
+            return std::make_shared<LineFormatItem>();
+        }
+        if (key == "m") {
+            return std::make_shared<MessageFormatItem>();
+        }
+        if (key == "n") {
+            return std::make_shared<NewlineFormatItem>();
+        }
+        if (key == "T") {
+            return std::make_shared<TabFormatItem>();
+        }
+        return std::make_shared<OtherFormatItem>(value);
     }
 
 }

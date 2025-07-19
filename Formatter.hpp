@@ -4,46 +4,31 @@
 
 #include <vector>
 #include <memory>
-#include <stdexcept>
 
 #include "FormatItem.hpp"
 #include "Message.hpp"
 
+/*
+    * Formatter类用于格式化日志消息，将其转换为指定的字符串格式。
+    * 它支持自定义格式化模式，可以包含时间戳、日志级别、日志名称、线程ID、文件名、行号和日志内容等信息。
+    * 通过解析格式化模式字符串，Formatter可以动态创建对应的格式化项，并在格式化日志消息时调用这些项的Format方法。
+    * 使用Formatter时，可以通过传入一个日志格式化模式字符串来指定日志的输出格式。
+ */
+
 namespace log{
 
     class Formatter{
-        public:
-            using ptr = std::shared_ptr<Formatter>;
-            Formatter(const std::string& pattern = "[%d{%H:%M:%S}][%p][%c][%t][%f:%l]%T%m%n");
-            void Format(std::ostream& out, const LogMsg& msg) const;
-            std::string Format(const LogMsg& msg) const;
-        private:
-            bool ParsePattern();
 
-            static FormatItem::ptr CreateItem(const std::string& key, const std::string& value)
-            {
-                // 根据键值对创建对应的格式化项
-                if (key == "d") {
-                    return std::make_shared<TimeFormatItem>(value);
-                } else if (key == "p") {
-                    return std::make_shared<LevelFormatItem>();
-                } else if (key == "c") {
-                    return std::make_shared<LoggerFormatItem>();
-                } else if (key == "t") {
-                    return std::make_shared<ThreadFormatItem>();
-                } else if (key == "f") {
-                    return std::make_shared<FileFormatItem>();
-                } else if (key == "l") {
-                    return std::make_shared<LineFormatItem>();
-                } else if (key == "m") {
-                    return std::make_shared<MessageFormatItem>();
-                } else if (key == "n") {
-                    return std::make_shared<NewlineFormatItem>();
-                } else if (key == "T") {
-                    return std::make_shared<TabFormatItem>();
-                }
-                return std::make_shared<OtherFormatItem>(value);
-            }
+        public:
+            using ptr = std::shared_ptr<Formatter>; // 智能指针类型别名
+            Formatter(std::string pattern);
+            void Format(std::ostream& out, const LogMsg& msg) const; // 格式化日志消息并输出到指定的输出流中
+            std::string Format(const LogMsg& msg) const; // 将日志消息格式化为字符串并返回
+
+        private:
+            bool ParsePattern(); // 解析日志格式化模式字符串，将其转换为对应的格式化项
+
+            static FormatItem::ptr CreateItem(const std::string& key, const std::string& value); // 根据键和值创建对应的格式化项
             std::string _pattern;  // 日志格式化模式
             std::vector<FormatItem::ptr> _items;  // 存储格式化项的向量
     };

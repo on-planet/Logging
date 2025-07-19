@@ -8,6 +8,19 @@
 #include <sys/stat.h>
 #include <string>
 
+/*
+ * 提供了日期和文件操作的实用工具类。
+ * Date类用于获取当前时间戳和转换为本地时间。
+
+ * File类用于检查文件是否存在、获取文件路径、创建目录等操作。
+ *  Date::Now() 返回当前时间的时间戳（time_t类型）。
+ *  Date::GetTimeSet() 返回当前时间的 struct tm 结构。
+ *  File::IsFileExist(const std::string& file_path) 检查指定文件是否存在。
+ *  File::GetPath(const std::string & file_path) 获取指定文件的所在目录路径。
+ *  File::CreateDir(const std::string & file_path) 创建指定路径的目录。
+ *
+ */
+
 namespace log{
 
     class Date{

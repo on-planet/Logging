@@ -6,8 +6,15 @@
 #include "Util.hpp"
 #include "Level.hpp"
 #include <thread>
+#include <utility>
 
+/*
+ * LogMsg类用于表示一条日志消息，包含时间戳、日志级别、日志名称、线程ID、源码文件名、源码行号和日志内容等信息。
+ * 它提供了获取和设置这些信息的方法，方便在日志系统中使用。
+ *
+*/
 namespace log{
+
     class LogMsg{
 
         public:
@@ -21,17 +28,17 @@ namespace log{
                 _payload(""){}
 
             LogMsg(LogLevel::Level level,
-                const std::string& logger,
-                const std::string& file,
+                std::string logger,
+                std::string file,
                 size_t line,
-                const std::string& payload
+                std::string  payload
                 ) : _ctime(Date::Now()),
                     _level(level),
-                    _logger(logger),
-                    _file(file),
+                    _logger(std::move(logger)),
+                    _file(std::move(file)),
                     _tID(std::this_thread::get_id()),
                     _line(line),
-                    _payload(payload){}
+                    _payload(std::move(payload)){}
             ~LogMsg(){}
 
             time_t getTime_t() const { return _ctime; }  //获取时间戳
