@@ -8,6 +8,7 @@
 #include "Util.hpp"
 #include <fstream>
 
+
 /*
  * LogSink类用于定义日志接收器的接口，派生类可以实现不同的日志输出方式。
  * 例如，StdOutSink类可以将日志输出到标准输出，FileSink类可以将日志写入文件，

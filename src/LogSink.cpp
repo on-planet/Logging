@@ -1,4 +1,4 @@
-#include "LogSink.hpp"
+#include "../include/LogSink.hpp"
 #include <stdexcept>
 
 namespace log{
