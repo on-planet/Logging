@@ -1,6 +1,7 @@
 # Logging
 本项目使用 CMake 构建,实现简单日志库, 支持同步和异步日志记录, 以及自定义日志格式。
 
+```text
 .
 ├── include/          # 存放所有头文件 (.hpp)
 │   ├── AsyncLogger.hpp
@@ -19,7 +20,7 @@
 ├── example/          # 存放示例代码
 │   └── main.cpp
 └── CMakeLists.txt    # 根 CMakeLists 文件
-
+```
 
 ### 编译与运行
 
@@ -59,7 +60,7 @@ void basic_usage() {
     logger->Warn("这是一条警告日志。");
 }
 ```
-# 异步日志使用方法
+### 异步日志使用方法
 ```cpp
 #include "AsyncLogger.hpp"
 #include "SinkFactory.hpp"
@@ -93,7 +94,7 @@ auto async_logger = std::make_shared<log::AsyncLogger>("async_worker");
 }
 ```
 
-# 自定义日志格式
+### 自定义日志格式
 ```cpp
 #include "Logger.hpp"
 #include "SinkFactory.hpp"
