@@ -36,6 +36,7 @@ make
 
 # 4. 运行示例程序
 ./logging_app
+```
 
 ### 基本使用方法（同步日志）
 
@@ -57,9 +58,9 @@ void basic_usage() {
     logger->Info("这是一条信息日志。");
     logger->Warn("这是一条警告日志。");
 }
-
+```
 # 异步日志使用方法
-
+```cpp
 #include "AsyncLogger.hpp"
 #include "SinkFactory.hpp"
 #include <thread>
@@ -90,10 +91,10 @@ auto async_logger = std::make_shared<log::AsyncLogger>("async_worker");
     }
     // 当 async_logger 离开作用域时，其析构函数会确保所有日志都被写入文件
 }
-
+```
 
 # 自定义日志格式
-
+```cpp
 #include "Logger.hpp"
 #include "SinkFactory.hpp"
 #include "Formatter.hpp"
@@ -114,3 +115,4 @@ auto formatter = std::make_shared<log::Formatter>(pattern);
     // 4. 记录日志
     logger->Debug("这是自定义格式的日志。");
 }
+```
